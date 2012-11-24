@@ -34,6 +34,18 @@ public class Card
     }
     
     /**
+     * Returns the value of this card.
+     * @return int Value of this card.
+     */
+    public int value() { return this.value; }
+    
+    /**
+     * Returns the family of this card.
+     * @return CardFamily family of this card.
+     */
+    public CardFamily family() { return this.family; }
+    
+    /**
      * Returns the symbol of the value of the card.
      * @return String String representing the value of the card. An integer for values lower than 10 and S, C and R for other ones.
      */
