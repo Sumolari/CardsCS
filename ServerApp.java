@@ -90,10 +90,14 @@ public class ServerApp
            }
            
            run();
-       } 
+       }
        catch ( IOException ioe )
        {
            System.out.println( "Something went wrong, bro :( " );
+       }
+       catch ( Exception e )
+       {
+           System.out.println( "Something went REALLY wrong" );
        }
    }
 }
