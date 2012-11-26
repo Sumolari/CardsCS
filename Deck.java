@@ -70,4 +70,27 @@ public class Deck
     {
         System.out.println( this.toString() );
     }
+    /**
+     * Sorts randomly the elements of an ArrayList<Card>
+     */
+    public static ArrayList<Card> unsort( ArrayList<Card> a )
+    {
+        int size = a.size() - 1, e1, e2;
+        
+        for (int i = 0; i < 10000; i++)
+        {
+            do{
+                e1 = (int) ( Math.random() * size + 1 );
+                e2 = (int) ( Math.random() * size + 1 );
+            }while(e1 == e2);
+        
+            Card first = a.get( e1 ), second = a.get( e2 );
+            a.remove( e2 );
+            a.add( e2, first );
+            a.remove( e1 );
+            a.add( e1, second );
+        }
+        
+        return a;
+    }
 }
