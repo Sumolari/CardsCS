@@ -39,6 +39,18 @@ public class Deck
         
     }
     
+    /**
+     * Removes top-most card in deck and returns it.
+     * @return Card Top-most card in this deck.
+     */
+    public Card popCard()
+    {
+        Card card = cards.get( cards.size() - 1 );
+        cards.remove( cards.size() -1 );
+        
+        return card;
+    }
+    
     @Override public String toString()
     {
         String res = "Deck with " + this.cards.size() + " cards.\n\n";
