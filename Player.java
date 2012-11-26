@@ -16,6 +16,9 @@ public class Player
     public String name() { return this.playerName; }
     public Socket socket() { return this.socket; }
     
-    public OutputStream output() throws Exception { return this.socket.getOutputStream(); }
-    public InputStream input() throws Exception { return this.socket.getInputStream(); }
+    public OutputStream outputStream() throws Exception { return this.socket.getOutputStream(); }
+    public InputStream inputStream() throws Exception { return this.socket.getInputStream(); }
+    
+    public PrintWriter output() throws Exception { return new PrintWriter( this.outputStream(), true ); }
+    public Scanner input() throws Exception { return new Scanner( this.inputStream() ); }
 }
