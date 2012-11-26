@@ -4,32 +4,39 @@ import java.net.*;
 
 public class ServerApp
 {
-   public static int MAXIMUM_CLIENTS    = 4;
+   public static int MAXIMUM_CLIENTS    = 2;
    public static int PORT               = 7777;
-    
+  
    private static ArrayList<Socket> connections = new ArrayList<Socket>();
    private static ArrayList<Player> players     = new ArrayList<Player>();
-    
-   /*
+   private static InputStream adminInput;
+   private static OutputStream adminOutput;
+   
    public static void run()
    {
+       System.out.println( "RUN!" );
+       
+       /*
+       
        try
        {
-          Scanner input = new Scanner( this.socket.getInputStream() );
-          PrintWriter output = new PrintWriter( this.socket.getOutputStream(), true );
+           
        
           
            //HERE GOES GAME LOGIC!
                        
-          println( "\tConnection with " + this.socket.getInetAddress() + " closed." );
-          this.socket.close();
+          
+          //println( "\tConnection with " + this.socket.getInetAddress() + " closed." );
+          //.socket.close();
+          
         }
         catch ( IOException ioe )
         {
             System.out.println( "Something went wrong, bro :( " );
         }
+        
+        */
    }
-   */
     
    public static void main( String[] args )
    {   
@@ -45,22 +52,40 @@ public class ServerApp
        
            while ( /* USER DID NOT WRITE A FINISH COMMAND AND */ connections.size() < MAXIMUM_CLIENTS )
            {
-               connections.add( ss.accept() );
+               Socket socket = ss.accept();
                
-               Scanner input = new Scanner( connections.get( 0 ).getInputStream() ); 
-               PrintWriter output = new PrintWriter( connections.get( 0 ).getOutputStream(), true );
+               // Add connection with user
+               connections.add( socket );
+               
+               // Open streams to interact with user
+               Scanner input = new Scanner( socket.getInputStream() ); 
+               PrintWriter output = new PrintWriter( socket.getOutputStream(), true );
                    
+               // Check if user is admin
                if ( connections.size() == 1 )
                {
-                   System.out.println( "\tAdmin connected:\t\t" + connections.get( 0 ).getInetAddress() );
-                   output.println( "\nYour match has been created. Please, wait until there is at least one more player." );
+                   System.out.println( "\tAdmin connected:\t\t" + socket.getInetAddress() );
+                   output.println( "\nWhat's your name?");
+                   
+                   Player admin = new Player( input.nextLine().trim(), socket );
+                   
+                   players.add( admin );
+                   
+                   admin.output().println( "\n" + admin.name() + ", your match has been created. Please, wait until there is at least one more player." );
                }
+               // If not admin, notifies admin
                else
                {
-                   System.out.println( "\tUser connected:\t\t" + connections.get( connections.size() - 1 ) );
+                   Player admin = players.get( 0 );
+                   
+                   System.out.println( "\tUser connected:\t\t" + socket.getInetAddress() );
+                   output.println( "\nWhat's your name?");
+                   
+                   Player newPlayer = new Player( input.nextLine().trim(), socket );
+                   
+                   admin.output().println( "\n" + newPlayer.name() + ", has joined." );
+                   newPlayer.output().println( "\n" + newPlayer.name() + ", you have joined " + admin.name() + " match." );
                }
-               
-               
                
            }
            
