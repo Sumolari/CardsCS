@@ -6,6 +6,7 @@ import java.util.*;
 public class Brisca
 {
     private ArrayList<Player> players;
+    private Card triumphCard;
     
     /**
      * Basic constructor, given a list of players handles all the match.
@@ -25,6 +26,10 @@ public class Brisca
         
         Deck deck = new Deck();
         
+        triumphCard = deck.popCard();
+        
+        System.out.println( "Triumph is\n" + triumphCard );
+        
         System.out.println( "\tGive 3 cards to each player.\n\n" );
         
         for ( Player aPlayer : players )
@@ -36,6 +41,7 @@ public class Brisca
                 aPlayer.addCard( card );
         
             }
+            aPlayer.output().println( "Triumph is\n" + triumphCard );
         }
         
         System.out.println( "Start match" );
