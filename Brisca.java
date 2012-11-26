@@ -5,7 +5,31 @@ import java.util.*;
  */
 public class Brisca
 {
-
+    private ArrayList<Player> players;
+    
+    /**
+     * Basic constructor, given a list of players handles all the match.
+     * @param ArrayList<Player> players List of players.
+     */
+    public Brisca( ArrayList<Player> players )
+    {
+        this.players = players;
+    }
+    
+    /**
+     * Method that handles match.
+     */
+    public void run()
+    {
+        System.out.println( "\tCreate and randomize deck." );
+        
+        Deck deck = new Deck();
+        
+        
+        
+        System.out.println( "Start match" );
+    }
+    
     /**
      * Returns the value of a card taking into account the triumph and card's value.
      * 
