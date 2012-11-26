@@ -47,7 +47,7 @@ public class Hand
      * that are not in player's hand.
      * @todo Vendría bien reescribir los bucles while por bucles do...while para darle más coherencia al código y que se entendiese mejor
      */
-    public void askForPlay()
+    public Card askForCard()
     {
         
         boolean inputWasCorrect = false; 
@@ -147,22 +147,7 @@ public class Hand
         }
         // End confirmation check
         
-        try
-        {
-            this.playCard( card );
-        }
-        catch( NotOwnedCardException noce )
-        {
-            /*
-             * About this exception.
-             * 
-             * This exception will never raise because previously we check that the card was in player's hand.
-             * It is not so cool to ask the user for confirmation when the card is not in his hand, so we
-             * check that condition before asking for confirmation.
-             * 
-             * However, it is needed this catch block because Java compiler is not smart enough to see this.
-             */ 
-        }
+        return card;
     }
     
     @Override public String toString()
