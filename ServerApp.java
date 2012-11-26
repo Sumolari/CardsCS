@@ -16,6 +16,9 @@ public class ServerApp
    {
        System.out.println( "RUN!" );
        
+       Brisca match = new Brisca( players );
+       match.start();
+       
        /*
        
        try
