@@ -7,38 +7,26 @@ public class ServerApp
    public static int MAXIMUM_CLIENTS    = 2;
    public static int PORT               = 7777;
   
-   private static ArrayList<Socket> connections = new ArrayList<Socket>();
    private static ArrayList<Player> players     = new ArrayList<Player>();
    private static InputStream adminInput;
    private static OutputStream adminOutput;
    
    public static void run()
    {
-       System.out.println( "RUN!" );
+       System.out.println( "\n\n\tRUN!" );
        
        Brisca match = new Brisca( players );
-       match.start();
-       
-       /*
        
        try
        {
-           
+           match.start();
+       }
+       catch ( Exception e )
+       {
+           System.out.println( "Exception in run()" );
+       }
        
-          
-           //HERE GOES GAME LOGIC!
-                       
-          
-          //println( "\tConnection with " + this.socket.getInetAddress() + " closed." );
-          //.socket.close();
-          
-        }
-        catch ( IOException ioe )
-        {
-            System.out.println( "Something went wrong, bro :( " );
-        }
-        
-        */
+       System.out.println( "\n\n\tGame finished!" );
    }
     
    public static void main( String[] args )
@@ -53,19 +41,16 @@ public class ServerApp
        
            System.out.println( "Activity log:" );
        
-           while ( /* USER DID NOT WRITE A FINISH COMMAND AND */ connections.size() < MAXIMUM_CLIENTS )
+           while ( /* USER DID NOT WRITE A FINISH COMMAND AND */ players.size() < MAXIMUM_CLIENTS )
            {
                Socket socket = ss.accept();
-               
-               // Add connection with user
-               connections.add( socket );
                
                // Open streams to interact with user
                Scanner input = new Scanner( socket.getInputStream() ); 
                PrintWriter output = new PrintWriter( socket.getOutputStream(), true );
                    
                // Check if user is admin
-               if ( connections.size() == 1 )
+               if ( players.size() < 1 )
                {
                    System.out.println( "\tAdmin connected:\t\t" + socket.getInetAddress() );
                    output.println( "\nWhat's your name?");
@@ -85,6 +70,7 @@ public class ServerApp
                    output.println( "\nWhat's your name?");
                    
                    Player newPlayer = new Player( input.nextLine().trim(), socket );
+                   players.add( newPlayer );
                    
                    admin.output().println( "\n" + newPlayer.name() + ", has joined." );
                    newPlayer.output().println( "\n" + newPlayer.name() + ", you have joined " + admin.name() + " match." );

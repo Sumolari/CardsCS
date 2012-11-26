@@ -14,14 +14,18 @@ public class Hand
         this.cards = new ArrayList<Card>();
     }
     
+    /**
+     * Adds given card to this hand.
+     * @param Card card Card to add.
+     */
     public void addCard( Card card )
     {
-        System.out.println( "The following card has been added to your hand:\n" + card );
         this.cards.add( card );
     }
     
     /**
      * Plays given card and removes it from hand.
+     * @param Card card Card to be played.
      */
     private void playCard( Card card ) throws NotOwnedCardException
     {

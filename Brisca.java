@@ -19,13 +19,24 @@ public class Brisca
     /**
      * Method that handles match.
      */
-    public void run()
+    public void start() throws Exception
     {
         System.out.println( "\tCreate and randomize deck." );
         
         Deck deck = new Deck();
         
+        System.out.println( "\tGive 3 cards to each player.\n\n" );
         
+        for ( Player aPlayer : players )
+        {
+            for ( int i = 0; i < 3; i++ )
+            {
+                Card card = deck.popCard();
+                System.out.println( "\tGiving \n" + card + "\n to each " + aPlayer.name() + "." );
+                aPlayer.addCard( card );
+        
+            }
+        }
         
         System.out.println( "Start match" );
     }
