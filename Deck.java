@@ -37,6 +37,7 @@ public class Deck
             }
         }
         
+        this.cards = unsort( this.cards );
     }
     
     /**
