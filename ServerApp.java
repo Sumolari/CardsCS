@@ -10,6 +10,7 @@ public class ServerApp
    private static ArrayList<Player> players     = new ArrayList<Player>();
    private static InputStream adminInput;
    private static OutputStream adminOutput;
+   private static boolean gameFinished = false;
    
    public static void run()
    {
@@ -48,7 +49,10 @@ public class ServerApp
                // Open streams to interact with user
                Scanner input = new Scanner( socket.getInputStream() ); 
                PrintWriter output = new PrintWriter( socket.getOutputStream(), true );
-                   
+               
+               //Put reading (inputStream) of number of players here, set MAXIMUM_PLAYERS variable (change it to not final) to value read.
+               //Checking of valid number of players (loop)
+               
                // Check if user is admin
                if ( players.size() < 1 )
                {
@@ -79,6 +83,22 @@ public class ServerApp
            }
            
            run();
+           
+           //loop that rotates through players until end of game
+           for (int i = 0; i < players.size(); i++){
+               Player currentPlayer = players.get( i );
+               Scanner input = new Scanner( currentPlayer.socket().getInputStream() ); 
+               PrintWriter output = new PrintWriter( currentPlayer.socket().getOutputStream(), true );
+               
+               currentPlayer.output().println( "It is your turn, select a card from your hand : " );
+               String selection = input.nextLine().trim();
+               
+               if ( selection.equals( "QUIT" ) ){ gameFinished = true; }
+               
+               if ( gameFinished ){ break; }
+               
+               if ( i == players.size() - 1 ) i = -1;
+           }
        }
        catch ( IOException ioe )
        {
