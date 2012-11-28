@@ -35,7 +35,7 @@ public class Brisca extends Match
         System.out.println( "Triumph is\n" + triumphCard );
         
         System.out.println( "\tGive 3 cards to each player.\n\n" );
-        
+        /*
         for ( Player aPlayer : players )
         {
             for ( int i = 0; i < 3; i++ )
@@ -46,7 +46,7 @@ public class Brisca extends Match
             }
             aPlayer.output().println( "Triumph is\n" + triumphCard );
         }
-        
+        */
         this.newRound();
         
         System.out.println( "Start match" );
@@ -61,7 +61,7 @@ public class Brisca extends Match
         if ( !this.areLast3Rounds )
         {
             this.sendLongLineToPlayers();
-            
+            /*
             for ( Player aPlayer : players )
             {
                 while ( aPlayer.handSize() < 3 )
@@ -71,6 +71,21 @@ public class Brisca extends Match
                     aPlayer.addCardToHand( card );
                 }
             }
+            */
+            
+            this.sendToAllPlayers( "Triumph is\n" + triumphCard );  //Maybe this is better?
+            
+            for ( Player aPlayer : players )
+            {
+                //aPlayer.output().println( "Triumph is\n" + triumphCard );
+                for ( int i = 0; i < 3; i++ )
+                {
+                    Card card = deck.popCard();
+                    System.out.println( "\tGiving \n" + card + "\n to " + aPlayer.name() + "." );
+                    aPlayer.addCardToHand( card );
+                }
+            }
+            
         }
         
         this.sendLongLineToPlayers();
@@ -266,7 +281,7 @@ public class Brisca extends Match
         cards.add( firstCard );
         cards.add( secondCard );
         return this.winnerCard( cards, triumph );
-    }
+    }//Este metodo no se usa... aunque no lo quites, por si acaso hacemos otro juego xD
     
     /**
      * Given an array list of cards, returns the winner of all of them taking into account the triumph.
@@ -366,8 +381,8 @@ public class Brisca extends Match
                     break;
                 case 12: // R 
                     totalScore += 4;
-                    break;
-                default: break;
+                    break;                  //Ejem Ejem... Sobra? xD
+                default: break;             //(bis)
             }
         }
         
