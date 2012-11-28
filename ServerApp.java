@@ -45,7 +45,7 @@ public class ServerApp
        
            System.out.println( "Activity log:" );
        
-           while ( /* USER DID NOT WRITE A FINISH COMMAND AND */ players.size() < MAXIMUM_CLIENTS )
+           while ( /* USER DID NOT WRITE A FINISH COMMAND AND */ players.size() < totalPlayers )
            {
                Socket socket = ss.accept();
                
@@ -75,9 +75,14 @@ public class ServerApp
                            
                            if ( totalPlayers > MAXIMUM_CLIENTS )
                            {
+                               admin.output().println( "Setting game to maximum number of players (" + MAXIMUM_CLIENTS + ")" );
                                totalPlayers = MAXIMUM_CLIENTS;
                            }
-                           
+                           if ( totalPlayers < 2 )
+                           { 
+                               admin.output().println( "Setting game to minimum number of players (2)" );
+                               totalPlayers = 2; 
+                           }
                            inputWasOk = true;
                            
                        }
@@ -130,21 +135,6 @@ public class ServerApp
            
            System.out.println( "This message SHOULD NOT BE PRINTED" );
            
-           //loop that rotates through players until end of game
-           for (int i = 0; i < players.size(); i++){
-               Player currentPlayer = players.get( i );
-               Scanner input = new Scanner( currentPlayer.socket().getInputStream() ); 
-               PrintWriter output = new PrintWriter( currentPlayer.socket().getOutputStream(), true );
-               
-               currentPlayer.output().println( "It is your turn, select a card from your hand : " );
-               String selection = input.nextLine().trim();
-               
-               if ( selection.equals( "QUIT" ) ){ gameFinished = true; }
-               
-               if ( gameFinished ){ break; }
-               
-               if ( i == players.size() - 1 ) i = -1;
-           }
        }
        catch ( IOException ioe )
        {

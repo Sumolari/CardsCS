@@ -176,11 +176,45 @@ public class Player
                     {
                         try
                         {
-                            this.output().println( "\n\tValue (S=10, C=11, R=12): " );
-                            value = this.input().nextInt();
+                            //this.output().println( "\n\tValue (S=10, C=11, R=12): " );
+                            this.output().println( "\n\tValue (1-7, S, C, R): " );
+                            char val = this.input().nextLine().trim().charAt(0);
+                            if ( val >= 49 && val <= 55 ) value = (int) (val - 48);
+                            else
+                            {
+                                switch( val )
+                                {
+                                    case 'S':                       //Trama: si sale la mayuscula, ejecuta hasta la minuscula y ahorro repetir lineas xD
+                                    case 's': value = 10; break;
+                                    case 'C': 
+                                    case 'c': value = 11; break;
+                                    case 'R': 
+                                    case 'r': value = 12; break;
+                                    
+                                    default: throw new Exception(); //si no es ni un numero ni una de estas letras, lanzo Exception
+                                    
+                                }
+                            }
+                            //value = this.input().nextInt();
                             
-                            this.output().println( "\n\tFamily (oros, copas, bastos, espadas): " );
-                            family = this.input().nextLine().trim(); 
+                            this.output().println( "\n\tFamily (Oros, Copas, Bastos, Espadas): " );
+                            char fam = this.input().nextLine().trim().charAt(0);
+                            
+                            switch( fam )
+                            {
+                                case 'O':                       //Trama: si sale la mayuscula, ejecuta hasta la minuscula y ahorro repetir lineas xD
+                                case 'o': family = "oros"; break;
+                                case 'C': 
+                                case 'c': family = "copas"; break;
+                                case 'B': 
+                                case 'b': family = "bastos"; break;
+                                case 'E': 
+                                case 'e': family = "espadas"; break;
+                                    
+                                default: throw new Exception(); //si no es una de estas letras, lanzo Exception
+                                    
+                            }
+                            //family = this.input().nextLine().trim(); 
                             
                             inputWasCorrect = true;
                         }
@@ -231,11 +265,11 @@ public class Player
             
             do
             {
-                this.output().println( "Use 'yes' or 'no': " );
-                selection = this.input().nextLine().trim().toLowerCase();
-            } while ( !selection.equals( "yes" ) && !selection.equals( "no" ) );
+                this.output().println( "Use 'Yes' or 'No': " );
+                selection = this.input().nextLine().trim().toUpperCase().substring(0,1);
+            } while ( "YN".indexOf( selection ) == -1 );
             
-            userIsSure = selection.equals( "yes" );
+            userIsSure = selection.equals( "Y" );
             
             if ( !userIsSure )
             {
