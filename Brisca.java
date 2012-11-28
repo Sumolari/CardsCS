@@ -49,7 +49,7 @@ public class Brisca extends Match
         */
         this.newRound();
         
-        System.out.println( "Start match" );
+        System.out.println( "Start match" );    //Emm, esto no se llegará a ejecutar xD
     }
     
     /**
@@ -61,7 +61,7 @@ public class Brisca extends Match
         if ( !this.areLast3Rounds )
         {
             this.sendLongLineToPlayers();
-            /*
+            
             for ( Player aPlayer : players )
             {
                 while ( aPlayer.handSize() < 3 )
@@ -71,21 +71,6 @@ public class Brisca extends Match
                     aPlayer.addCardToHand( card );
                 }
             }
-            */
-            
-            this.sendToAllPlayers( "Triumph is\n" + triumphCard );  //Maybe this is better?
-            
-            for ( Player aPlayer : players )
-            {
-                //aPlayer.output().println( "Triumph is\n" + triumphCard );
-                for ( int i = 0; i < 3; i++ )
-                {
-                    Card card = deck.popCard();
-                    System.out.println( "\tGiving \n" + card + "\n to " + aPlayer.name() + "." );
-                    aPlayer.addCardToHand( card );
-                }
-            }
-            
         }
         
         this.sendLongLineToPlayers();
@@ -190,7 +175,7 @@ public class Brisca extends Match
     public void finishGame()
     {
         this.sendToAllPlayers( "Game is finished. These are the final scores:\n" + this.scores() );
-        
+        System.exit(0);     //Si no acabamos aquí de algún modo, la ronda continua (con 0 cartas en la mano xD)
     }
     
     /**
@@ -212,7 +197,7 @@ public class Brisca extends Match
             {
                 res += "\n" + aCard.toString() + "\n";
             }
-            
+            //esto de la winner card si sabes jugar sobra, y en juego de 2 marea xD
             res += "\nWinner card:\n" + this.winnerCard( this.cardsInTable, this.triumphCard.family() );
         }
         
