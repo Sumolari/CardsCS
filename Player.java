@@ -7,6 +7,7 @@ public class Player
     private String playerName;
     private Socket socket;
     private Hand hand;
+    private ArrayList<Card> wonCards;
     
     /**
      * Creates a new player given its name and its socket.
@@ -19,6 +20,7 @@ public class Player
         this.playerName = playerName;
         this.socket = socket;
         this.hand = new Hand();
+        this.wonCards = new ArrayList<Card>();
     }
     
     /**
@@ -37,7 +39,7 @@ public class Player
      * Adds given card to player's hand.
      * @param Card card Card to be added.
      */
-    public void addCard( Card card )
+    public void addCardToHand( Card card )
     { 
         this.output().println( "The following card has been added to your hand:\n" + card );
         this.hand.addCard( card );
@@ -47,9 +49,36 @@ public class Player
      * Asks player for a card and returns it.
      * @return Card Card chosen by player.
      */
-    public Card getCard()
+    public Card getCardFromHand()
     {
         return this.askForCard();
+    }
+    
+    /**
+     * Adds given list of cards to won stack.
+     * @param ArrayList<Card> cards Cards to be added to stack of won cards.
+     */
+    public void addCardWonStack( ArrayList<Card> cards )
+    {
+        this.wonCards.addAll( cards );
+    }
+    
+    /**
+     * Adds given card to the list of cards won by this player.
+     * @param Card card Card to be added.
+     */
+    public void addCardWonStack( Card card )
+    {
+        this.wonCards.add( card );
+    }
+    
+    /**
+     * Returns the list of cards won by this player.
+     * @return ArrayList<Card> Cards won by this player.
+     */
+    public ArrayList<Card> wonCards()
+    {
+        return this.wonCards;
     }
     
     /**
@@ -216,6 +245,8 @@ public class Player
             }
         }
         // End confirmation check
+        
+        this.hand.removeCard( card );
         
         return card;
     }

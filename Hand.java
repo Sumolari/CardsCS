@@ -24,6 +24,15 @@ public class Hand
     }
     
     /**
+     * Removes given card from hand if it is in this hand.
+     * @param Card card Card to be removed.
+     */
+    public void removeCard( Card card )
+    {
+        if ( this.has( card ) ) this.cards.remove( card );
+    }
+    
+    /**
      * Returns whether this hand contains given card or not.
      * @param Card card Card to be checked.
      * @return boolean True if card is in this hand, false if not.
@@ -40,23 +49,6 @@ public class Hand
     public int size()
     {
         return this.cards.size();
-    }
-    
-    /**
-     * Plays given card and removes it from hand.
-     * @param Card card Card to be played.
-     */
-    private void playCard( Card card ) throws NotOwnedCardException
-    {
-        if ( this.cards.contains( card ) )
-        {
-            System.out.println( "Player chooses:\n" + card );
-            this.cards.remove( card );
-        }
-        else
-        {
-            throw new NotOwnedCardException( "This card is not owned by this player: " + card );
-        }
     }
     
     @Override public String toString()

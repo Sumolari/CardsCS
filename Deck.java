@@ -52,6 +52,15 @@ public class Deck
         return card;
     }
     
+    /**
+     * Returns how many cards has this deck.
+     * @return int Integer representing the remaining amount of cards in this deck.
+     */
+    public int size()
+    {
+        return this.cards.size();
+    }
+    
     @Override public String toString()
     {
         String res = "Deck with " + this.cards.size() + " cards.\n\n";
