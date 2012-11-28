@@ -8,9 +8,10 @@ public class ServerApp
    public static int PORT               = 7777;
   
    private static ArrayList<Player> players     = new ArrayList<Player>();
+   private static boolean gameFinished          = false;
    private static InputStream adminInput;
    private static OutputStream adminOutput;
-   private static boolean gameFinished = false;
+   private static int totalPlayers;
    
    public static void run()
    {
@@ -24,6 +25,8 @@ public class ServerApp
        }
        catch ( Exception e )
        {
+           System.err.println( e.getMessage() );
+           e.printStackTrace( System.err );
            System.out.println( "Exception in run()" );
        }
        
@@ -50,9 +53,6 @@ public class ServerApp
                Scanner input = new Scanner( socket.getInputStream() ); 
                PrintWriter output = new PrintWriter( socket.getOutputStream(), true );
                
-               //Put reading (inputStream) of number of players here, set MAXIMUM_PLAYERS variable (change it to not final) to value read.
-               //Checking of valid number of players (loop)
-               
                // Check if user is admin
                if ( players.size() < 1 )
                {
@@ -63,7 +63,31 @@ public class ServerApp
                    
                    players.add( admin );
                    
-                   admin.output().println( "\n" + admin.name() + ", your match has been created. Please, wait until there is at least one more player." );
+                   admin.output().println( "\n" + admin.name() + ", your match has been created.");
+                   
+                   boolean inputWasOk = false;
+                   do
+                   {
+                       try
+                       {
+                           admin.output().println( "How many players do you want to play with?" );
+                           totalPlayers = admin.input().nextInt();
+                           
+                           if ( totalPlayers > MAXIMUM_CLIENTS )
+                           {
+                               totalPlayers = MAXIMUM_CLIENTS;
+                           }
+                           
+                           inputWasOk = true;
+                           
+                       }
+                       catch ( InputMismatchException ime )
+                       {
+                           admin.output().println( "That was not a number!" );
+                       }
+                   } while ( !inputWasOk );
+                   
+                   admin.output().println( "Please, wait until there connects " + ( totalPlayers - 1 ) + " more player" + ( ( totalPlayers > 2 ) ? "s." : "." ) );
                }
                // If not admin, notifies admin
                else
@@ -71,9 +95,29 @@ public class ServerApp
                    Player admin = players.get( 0 );
                    
                    System.out.println( "\tUser connected:\t\t" + socket.getInetAddress() );
-                   output.println( "\nWhat's your name?");
                    
-                   Player newPlayer = new Player( input.nextLine().trim(), socket );
+                   String aName = "Just a Random Name for a Random User.";
+                   
+                   boolean usedName = true;
+                   
+                   while ( usedName )
+                   {
+                       output.println( "\nWhat's your name?");
+                       
+                       aName = input.nextLine().trim();
+                       
+                       usedName = false;
+                       for ( Player aPlayer : players )
+                       {
+                           if ( aPlayer.name().equals( aName ) )
+                           {
+                               usedName = true;
+                               output.println( "\nName already in use!" );
+                           }
+                       }
+                    }
+                   
+                   Player newPlayer = new Player( aName, socket );
                    players.add( newPlayer );
                    
                    admin.output().println( "\n" + newPlayer.name() + ", has joined." );
@@ -83,6 +127,8 @@ public class ServerApp
            }
            
            run();
+           
+           System.out.println( "This message SHOULD NOT BE PRINTED" );
            
            //loop that rotates through players until end of game
            for (int i = 0; i < players.size(); i++){

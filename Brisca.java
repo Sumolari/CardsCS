@@ -3,10 +3,12 @@ import java.util.*;
 /**
  * Handles basic rules of Brisca game.
  */
-public class Brisca
+public class Brisca extends Match
 {
-    private ArrayList<Player> players;
     private Card triumphCard;
+    private boolean areLast3Rounds;
+    private Deck deck;
+    private ArrayList<Card> cardsInTable;
     
     /**
      * Basic constructor, given a list of players handles all the match.
@@ -15,6 +17,7 @@ public class Brisca
     public Brisca( ArrayList<Player> players )
     {
         this.players = players;
+        this.areLast3Rounds = false;
     }
     
     /**
@@ -24,7 +27,7 @@ public class Brisca
     {
         System.out.println( "\tCreate and randomize deck." );
         
-        Deck deck = new Deck();
+        deck = new Deck();
         
         triumphCard = deck.popCard();
         
@@ -37,14 +40,84 @@ public class Brisca
             for ( int i = 0; i < 3; i++ )
             {
                 Card card = deck.popCard();
-                System.out.println( "\tGiving \n" + card + "\n to each " + aPlayer.name() + "." );
+                System.out.println( "\tGiving \n" + card + "\n to " + aPlayer.name() + "." );
                 aPlayer.addCard( card );
-        
             }
             aPlayer.output().println( "Triumph is\n" + triumphCard );
         }
         
+        this.newRound();
+        
         System.out.println( "Start match" );
+    }
+    
+    public void newRound()
+    {
+        this.cardsInTable = new ArrayList<Card>();
+        
+        // First give new cards to each play until hand is full and if they are not in final rounds.
+        if ( !this.areLast3Rounds )
+        {
+            for ( Player aPlayer : players )
+            {
+                while ( aPlayer.handSize() < 3 )
+                {
+                    Card card = deck.popCard();
+                    System.out.println( "\tGiving \n" + card + "\n to " + aPlayer.name() + "." );
+                    aPlayer.addCard( card );
+                }
+            }
+        }
+        
+        this.sendLongLineToPlayers();
+        
+        // With their hands full, ask first player in list to play a card.
+        for ( Player aPlayer : players )
+        {
+            ArrayList<Player> otherPlayers = new ArrayList<Player>( players );
+            otherPlayers.remove( aPlayer );
+            
+            this.sendToSomePlayers( new String( aPlayer.name() + " must choose a card. Please, wait." ), otherPlayers );
+            
+            aPlayer.output().println( this.table() ); 
+            Card cardPlayed = aPlayer.getCard();
+            
+            this.cardsInTable.add( cardPlayed );
+            
+            this.sendToSomePlayers( new String( aPlayer.name() + " has played:\n" + cardPlayed.toString() ), otherPlayers );
+        }
+        
+        // When all the players have played a card, then compute the winner
+        this.sendLongLineToPlayers();
+        this.sendToAllPlayers( "Winner is " + this.winnerPlayer( this.cardsInTable, this.triumphCard.family() ).name() );
+    }
+    
+    /**
+     * Returns a String representing the current state of the table.
+     * @return String String representing the current state of the table.
+     */
+    private String table()
+    {   
+        String res = "Cards in table:\n";
+        
+        if ( this.cardsInTable.size() < 1 )
+        {
+            res += "\tTable is empty.";
+        }
+        else
+        {
+        
+            for ( Card aCard : this.cardsInTable )
+            {
+                res += "\n" + aCard.toString() + "\n";
+            }
+            
+            res += "\nWinner card:\n" + this.winnerCard( this.cardsInTable, this.triumphCard.family() );
+        }
+        
+        res += "\nTriumph:\n" + this.triumphCard;
+        
+        return res + "\n";
     }
     
     /**
@@ -86,12 +159,12 @@ public class Brisca
      * @param CardFamily triumph Triumph os this match.
      * @return Card Winner card.
      */
-    public static Card winnerCard( Card firstCard, Card secondCard, CardFamily triumph )
+    public Card winnerCard( Card firstCard, Card secondCard, CardFamily triumph )
     {
         ArrayList<Card> cards = new ArrayList<Card>();
         cards.add( firstCard );
         cards.add( secondCard );
-        return Brisca.winnerCard( cards, triumph );
+        return this.winnerCard( cards, triumph );
     }
     
     /**
@@ -100,24 +173,61 @@ public class Brisca
      * @param CardFamily triumph Triumph randomly selected at the beginning of the match.
      * @return Card Winner card.
      */
-    public static Card winnerCard( ArrayList<Card> cards, CardFamily triumph )
+    public Card winnerCard( ArrayList<Card> cards, CardFamily triumph )
     {
+        Object[] res = this.winnerCouple( cards, triumph );
+        Card card = ( Card ) res[ 0 ];
+        return card;
+    }
+    
+    public Player winnerPlayer( ArrayList<Card> cards, CardFamily triumph )
+    {
+        Object[] res = this.winnerCouple( cards, triumph );
+        Integer _t = ( Integer ) res[ 1 ];
+        int _s = _t.intValue();
+        return this.players.get( _s );
+    }
+    
+    /**
+     * Given a list of cards and triumph family, returns the couple { winner card, winner player }.
+     * This method is just for winnerCard and winnerPlayer. This method SHOULD NOT BE USED in any other method.
+     * 
+     * This mehod assumes that player and card's list follow the same order. That means that
+     * card with index 1 was played by player with index 1.
+     * 
+     * @param ArrayList<Card> cards List of cards.
+     * @param CardFamily triumph Triumph.
+     * @return Object[] 0 => Card Winner card, 1 => Player Winner player
+     */
+    private Object[] winnerCouple( ArrayList<Card> cards, CardFamily triumph )
+    {
+        Object[] res = new Object[2];
         int maxValuePos = 0;
         Card winnerCard = null;
+        
+        if ( cards.size() < 1 ) return null;
+        
+        Card initialCard = cards.get( 0 );
         
         int _t = 0;
         for ( Card aCard : cards )
         {   
-            if ( Brisca.valueForCard( aCard, triumph ) > Brisca.valueForCard( winnerCard, triumph ) )
+            if ( aCard.family().equals( initialCard.family() ) || aCard.family().equals( triumph ) )
             {
-                maxValuePos = _t;
-                winnerCard = aCard;
+                if ( Brisca.valueForCard( aCard, triumph ) > Brisca.valueForCard( winnerCard, triumph ) )
+                {
+                    maxValuePos = _t;
+                    winnerCard = aCard;
+                }
             }
             
             _t++;
         }
         
-        return winnerCard;
+        res[ 0 ] = winnerCard;
+        res[ 1 ] = new Integer( maxValuePos );
+        
+        return res;
     }
     
     /**
