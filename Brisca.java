@@ -198,7 +198,7 @@ public class Brisca extends Match
                 res += "\n" + aCard.toString() + "\n";
             }
             //esto de la winner card si sabes jugar sobra, y en juego de 2 marea xD
-            res += "\nWinner card:\n" + this.winnerCard( this.cardsInTable, this.triumphCard.family() );
+            //res += "\nWinner card:\n" + this.winnerCard( this.cardsInTable, this.triumphCard.family() );
         }
         
         res += "\nTriumph:\n" + this.triumphCard;

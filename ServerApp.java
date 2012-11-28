@@ -11,7 +11,7 @@ public class ServerApp
    private static boolean gameFinished          = false;
    private static InputStream adminInput;
    private static OutputStream adminOutput;
-   private static int totalPlayers;
+   private static int totalPlayers = MAXIMUM_CLIENTS;
    
    public static void run()
    {
@@ -70,7 +70,7 @@ public class ServerApp
                    {
                        try
                        {
-                           admin.output().println( "How many players do you want to play with?" );
+                           admin.output().println( "How many players do you want for this game?" );
                            totalPlayers = admin.input().nextInt();
                            
                            if ( totalPlayers > MAXIMUM_CLIENTS )
