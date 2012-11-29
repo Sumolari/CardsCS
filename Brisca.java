@@ -111,6 +111,50 @@ public class Brisca extends Match
             if ( this.cardsInTable.size() < 1 )
             {
                 // Ask player if he wants to change its card.
+                
+                Card toCheck = null;
+                boolean didAccept = false;
+                
+                if ( triumphCard.value() <= 7 && triumphCard.value() >= 4 )
+                {
+                    // Check for 2
+                    try
+                    {
+                        toCheck = new Card( 2, triumphCard.family() );
+                    }
+                    catch ( Exception e )
+                    {
+                    }
+                    
+                    if ( aPlayer.has( toCheck ) )
+                    {
+                        didAccept = aPlayer.askForBoolean( "Do you want to change your 2 of " + triumphCard.family() + " by:\n" + triumphCard + "?" );
+                    }
+                }
+                else
+                {
+                    // Check for 7
+                    try
+                    {
+                        toCheck = new Card( 7, triumphCard.family() );
+                    }
+                    catch ( Exception e )
+                    {
+                    }
+                    
+                    if ( aPlayer.has( toCheck ) )
+                    {
+                        didAccept = aPlayer.askForBoolean( "Do you want to change your 7 of " + triumphCard.family() + " by:\n" + triumphCard + "?" );
+                    }
+                } 
+                
+                if ( didAccept )
+                {
+                    // Exchange cards
+                    aPlayer.removeCardFromHand( toCheck );
+                    aPlayer.addCardToHand( this.triumphCard );
+                    this.triumphCard = toCheck;
+                }
             }
             
             if ( this.areLast3Rounds && this.cardsInTable.size() > 0 )

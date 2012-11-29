@@ -36,6 +36,13 @@ public class Player
     public Socket socket() { return this.socket; }
     
     /**
+     * Returns whether this player has given card or not.
+     * @param Card card to be checked.
+     * @return boolean True if this player has given card, false if not.
+     */
+    public boolean has( Card card ) { return this.hand.has( card ); }
+    
+    /**
      * Adds given card to player's hand.
      * @param Card card Card to be added.
      */
@@ -43,6 +50,16 @@ public class Player
     { 
         this.output().println( "The following card has been added to your hand:\n" + card );
         this.hand.addCard( card );
+    }
+    
+    /**
+     * Removes given card from hand.
+     * @param Card card Card to be removed.
+     */
+    public void removeCardFromHand( Card card )
+    {
+        this.output().println( "The following card has been removed from your hand:\n" + card );
+        this.hand.removeCard( card );
     }
     
     /**
@@ -163,7 +180,7 @@ public class Player
      * input and invalid card, as well as choosing cards 
      * that are not in player's hand.
      * @param ArrayList<CardFamily> requiredFamilies Required families. Use null if there is no required family.
-     * @todo Vendría bien reescribir los bucles while por bucles do...while para darle más coherencia al código y que se entendiese mejor
+     * @return Card Card selected by player.
      */
     private Card askForCard( ArrayList<CardFamily> requiredFamilies )
     {
@@ -325,5 +342,24 @@ public class Player
         this.hand.removeCard( card );
         
         return card;
+    }
+    
+    /**
+     * Asks the user for a boolean.
+     * @param String message Message to be shown to player.
+     * @return boolean Boolean indicating if player accepts or not.
+     */
+    public boolean askForBoolean( String message )
+    {
+        String selection = "";
+        
+        do
+        {
+            this.output().println( message );
+            this.output().println( "Use 'Yes' or 'No': " );
+            selection = this.input().nextLine().trim().toUpperCase().substring( 0, 1 );
+        } while ( "YN".indexOf( selection ) == -1 );
+        
+        return selection.equals( "Y" );
     }
 }
