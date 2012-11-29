@@ -51,7 +51,17 @@ public class Player
      */
     public Card getCardFromHand()
     {
-        return this.askForCard();
+        return this.askForCard( null );
+    }
+    
+    /**
+     * Asks player for a card of given families. If player does not have any card matching this conditions, he can play any card.
+     * @param ArrayList<CardFamily> families Families required.
+     * @return Card Card of given family or triumph.
+     */
+    public Card getCardFromHandForced( ArrayList<CardFamily> families )
+    {
+        return this.askForCard( families );
     }
     
     /**
@@ -141,53 +151,83 @@ public class Player
      * This method handles all possiblities of invalid 
      * input and invalid card, as well as choosing cards 
      * that are not in player's hand.
-     * @todo Vendría bien reescribir los bucles while por bucles do...while para darle más coherencia al código y que se entendiese mejor
      */
     private Card askForCard()
     {
+        return this.askForCard( null );
+    }
+    
+    /**
+     * Asks the user for a card in their hand to play. 
+     * This method handles all possiblities of invalid 
+     * input and invalid card, as well as choosing cards 
+     * that are not in player's hand.
+     * @param ArrayList<CardFamily> requiredFamilies Required families. Use null if there is no required family.
+     * @todo Vendría bien reescribir los bucles while por bucles do...while para darle más coherencia al código y que se entendiese mejor
+     */
+    private Card askForCard( ArrayList<CardFamily> requiredFamilies )
+    {
+
+        boolean familyIsCorrect = ( !this.hand.hasOfFamily( requiredFamilies ) ) ? true : false;
         
-        boolean inputWasCorrect = false; 
-        boolean cardWasCorrect  = false;
-        boolean cardWasInHand   = false;
+        
         boolean userIsSure      = false;
         
         Card card = null;
         
         // Start confirmation check
-        while ( !userIsSure )
+        do
         {
+            boolean inputWasCorrect = false; 
+            
             this.output().println( "\nYour hand:\n" );
-            
             this.output().println( this.hand );
-            
             this.output().println( this.name() + ", what card do you want to play?" );
             
             // Start hand check
-            while ( !cardWasInHand )
+            do
             {
+                boolean cardWasCorrect = false;
+                
                 // Start card check
-                while ( !cardWasCorrect )
+                do
                 {
                     int value = -1;
                     String family = "";
                     
                     // Start syntax check
-                    while ( !inputWasCorrect )
+                    do
                     {
                         try
                         {
+                            if ( this.hand.hasOfFamily( requiredFamilies ) )
+                            {
+                                String alert = "\nRebember: You have to play a card of ";
+                                
+                                for ( int _i = 0; _i < requiredFamilies.size(); _i++ )
+                                {
+                                    alert += requiredFamilies.get( _i );
+                                    if ( _i + 2 < requiredFamilies.size() ) alert += ", ";
+                                    else if ( _i + 1 < requiredFamilies.size() ) alert += " or ";
+                                }
+                                
+                                this.output().println( alert + "." );
+                            }
+                            
                             //this.output().println( "\n\tValue (S=10, C=11, R=12): " );
                             this.output().println( "\n\tValue (1-7, S, C, R): " );
                             char val = this.input().nextLine().trim().charAt(0);
-                            if ( val >= 49 && val <= 55 ) value = (int) (val - 48);
+                            if ( val >= 49 && val <= 55 ) value = (int) ( val - 48 );
                             else
                             {
-                                switch( val )
+                                switch ( val )
                                 {
                                     case 'S':                       //Trama: si sale la mayuscula, ejecuta hasta la minuscula y ahorro repetir lineas xD
                                     case 's': value = 10; break;
+                                    
                                     case 'C': 
                                     case 'c': value = 11; break;
+
                                     case 'R': 
                                     case 'r': value = 12; break;
                                     
@@ -195,19 +235,22 @@ public class Player
                                     
                                 }
                             }
-                            //value = this.input().nextInt();
+                            //value = this.input().nextInt();                            
                             
                             this.output().println( "\n\tFamily (Oros, Copas, Bastos, Espadas): " );
-                            char fam = this.input().nextLine().trim().charAt(0);
+                            char fam = this.input().nextLine().trim().charAt( 0 );
                             
-                            switch( fam )
+                            switch ( fam )
                             {
                                 case 'O':                       //Trama: si sale la mayuscula, ejecuta hasta la minuscula y ahorro repetir lineas xD
                                 case 'o': family = "oros"; break;
+                                
                                 case 'C': 
                                 case 'c': family = "copas"; break;
+                                
                                 case 'B': 
                                 case 'b': family = "bastos"; break;
+                                
                                 case 'E': 
                                 case 'e': family = "espadas"; break;
                                     
@@ -218,13 +261,26 @@ public class Player
                             
                             inputWasCorrect = true;
                         }
-                        catch( Exception e )
+                        catch ( Exception e )
                         {
                             this.output().println( "Invalid syntax, try again. Rembember that the syntax is {value} {family}, for instance: 7 espadas." );
                             this.input().nextLine();
                             inputWasCorrect = false;
                         }
-                    }
+                        
+                        if ( this.hand.hasOfFamily( requiredFamilies ) )
+                        {
+                            try
+                            {
+                                inputWasCorrect = requiredFamilies.contains( new CardFamily( family ) );
+                            }
+                            catch ( Exception icfe )
+                            {
+                                inputWasCorrect = false;
+                            }
+                        }
+                        
+                    } while ( !inputWasCorrect );
                     // End syntax check
                     
                     inputWasCorrect = false;
@@ -240,24 +296,16 @@ public class Player
                         this.output().println( "That card ( " + value + " of " + family + " ) does not exist. Rembember that the syntax is {value} {family}, for instance: 7 espadas" );
                     }
                         
-                }
+                } while ( !cardWasCorrect );
                 // End card check
-                
-                cardWasCorrect = false;
             
-                if ( this.hand.has( card ) )
-                {
-                    cardWasInHand = true;
-                }
-                else
+                if ( ! this.hand.has( card ) )
                 {
                     this.output().println( "That card is not in your hand!" );
                 }
                
-            }
+            } while ( !this.hand.has( card ) );
             // End hand check
-            
-            cardWasInHand = false;
             
             this.output().println( "=====\nAre you sure that you want to play this card?\n\n" + card + "\n\n=====\n" );
             
@@ -271,13 +319,7 @@ public class Player
             
             userIsSure = selection.equals( "Y" );
             
-            if ( !userIsSure )
-            {
-                inputWasCorrect = false;
-                cardWasCorrect  = false;
-                cardWasInHand   = false;
-            }
-        }
+        } while ( !userIsSure );
         // End confirmation check
         
         this.hand.removeCard( card );

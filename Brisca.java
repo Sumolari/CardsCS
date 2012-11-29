@@ -97,7 +97,6 @@ public class Brisca extends Match
         // With their hands full, ask first player in list to play a card.
         for ( Player aPlayer : players )
         {
-            
             // The first player (winner of the previous round) should be able to change the 7 of triumph by the triumph in table, of the 2 of triumph if triumph is 7.
             
             ArrayList<Player> otherPlayers = new ArrayList<Player>( players );
@@ -105,8 +104,31 @@ public class Brisca extends Match
             
             this.sendToSomePlayers( new String( aPlayer.name() + " must choose a card. Please, wait." ), otherPlayers );
             
-            aPlayer.output().println( this.table() ); 
-            Card cardPlayed = aPlayer.getCardFromHand();
+            aPlayer.output().println( this.table() );
+            
+            Card cardPlayed = null;
+            
+            if ( this.cardsInTable.size() < 1 )
+            {
+                // Ask player if he wants to change its card.
+            }
+            
+            if ( this.areLast3Rounds && this.cardsInTable.size() > 0 )
+            {
+                ArrayList<CardFamily> families = new ArrayList<CardFamily>();
+                families.add( this.cardsInTable.get( 0 ).family() );
+                
+                if ( !families.contains( this.triumphCard.family() ) )
+                {
+                    families.add ( this.triumphCard.family() );
+                }
+                
+                cardPlayed = aPlayer.getCardFromHandForced( families );
+            }
+            else
+            {
+                cardPlayed = aPlayer.getCardFromHand();
+            }
             
             this.cardsInTable.add( cardPlayed );
             
@@ -174,6 +196,17 @@ public class Brisca extends Match
      */
     public void finishGame()
     {
+        ArrayList<Integer> scores = new ArrayList<Integer>();
+        
+        for ( Player aPlayer : this.players )
+        {
+            scores.add( new Integer( Brisca.scoreForCards( aPlayer.wonCards() ) ) );
+        }
+        
+        Stat matchStats = new Stat( this.players, scores );
+        
+        StatisticsServer.addStatToDisk( matchStats );
+        
         this.sendToAllPlayers( "Game is finished. These are the final scores:\n" + this.scores() );
         System.exit(0);     //Si no acabamos aquí de algún modo, la ronda continua (con 0 cartas en la mano xD)
     }

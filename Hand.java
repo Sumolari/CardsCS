@@ -43,6 +43,45 @@ public class Hand
     }
     
     /**
+     * Returns whether this hand has at least one card of given family.
+     * @param ArrayList<CardFamily> families Families to be checked.
+     * @return Boolean True if this hand has a card of given family, false if not.
+     */
+    public boolean hasOfFamily( ArrayList<CardFamily> families )
+    {
+        if ( families == null ) return false;
+        
+        for ( CardFamily aFam : families )
+        {
+            if ( this.familiesInHand().contains( aFam ) )
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Returns a list of CardFamilies in this hand.
+     * @return ArrayList<CardFamily> List of families in this hand.
+     */
+    private ArrayList<CardFamily> familiesInHand()
+    {
+        ArrayList<CardFamily> res = new ArrayList<CardFamily>();
+        
+        for ( Card aCard : this.cards )
+        {
+            if ( !res.contains( aCard.family() ) )
+            {
+                res.add( aCard.family() );
+            }
+        }
+        
+        return res;
+    }
+    
+    /**
      * Returns the amount of cards in this hand.
      * @return int Amount of cards in this hand.
      */
