@@ -15,10 +15,21 @@ public class StatisticsServer extends Thread
      */
     public StatisticsServer( Socket socket )
     {
-       this.socket = socket;
-       println( "\tUser connected:\t\t" + this.socket.getInetAddress() );
+        this.socket = socket;
+        println( "\tUser connected:\t\t" + this.socket.getInetAddress() );
        
-       // Send now the top-10
+        try
+        {
+            PrintWriter output = new PrintWriter( socket.getOutputStream(), true );
+           
+            for ( Stat aS : getStatsFromDisk() )
+            {
+                   output.println( aS );
+            }    
+        }
+        catch ( Exception e )
+        {
+        }
     }
     
     /**
