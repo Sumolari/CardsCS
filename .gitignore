@@ -6,3 +6,4 @@
 *.ear
 *.ctxt
 *.class
+.DS_Store

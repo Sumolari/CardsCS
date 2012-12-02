@@ -281,7 +281,19 @@ public class Player
                         catch ( Exception e )
                         {
                             this.output().println( "Invalid syntax, try again. Rembember that the syntax is {value} {family}, for instance: 7 espadas." );
-                            this.input().nextLine();
+                            try
+                            {
+                                this.input().nextLine();
+                            }
+                            catch ( NoSuchElementException nsee )
+                            {
+                                ArrayList<Player> otherPlayers = new ArrayList<Player>( ServerApp.match().players() );
+                                otherPlayers.remove( this );
+                                
+                                ServerApp.match().sendToSomePlayers( this.name() + " has been disconnected. The match is finished.", otherPlayers );
+                                
+                                ServerApp.match().finishGame();
+                            }
                             inputWasCorrect = false;
                         }
                         

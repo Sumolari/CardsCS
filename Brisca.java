@@ -24,7 +24,7 @@ public class Brisca extends Match
     /**
      * Method that handles match.
      */
-    public void start() throws Exception
+    @Override public void start() throws Exception
     {
         System.out.println( "\tCreate and randomize deck." );
         
@@ -238,7 +238,7 @@ public class Brisca extends Match
      * 
      * You lose the game.
      */
-    public void finishGame()
+    @Override public void finishGame()
     {
         ArrayList<Integer> scores = new ArrayList<Integer>();
         

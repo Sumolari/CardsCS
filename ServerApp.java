@@ -4,7 +4,7 @@ import java.net.*;
 
 public class ServerApp
 {
-   public static int MAXIMUM_CLIENTS    = 2;
+   public static int MAXIMUM_CLIENTS    = 4;
    public static int PORT               = 7777;
   
    private static ArrayList<Player> players     = new ArrayList<Player>();
@@ -12,12 +12,22 @@ public class ServerApp
    private static InputStream adminInput;
    private static OutputStream adminOutput;
    private static int totalPlayers = MAXIMUM_CLIENTS;
+   private static Match match;
    
+   /**
+    * Method used to access to current match from outside of this class.
+    * @return Match Current match.
+    */
+   public static Match match() { return match; }
+   
+   /**
+    * Start the match!
+    */
    public static void run()
    {
        System.out.println( "\n\n\tRUN!" );
        
-       Brisca match = new Brisca( players );
+       match = new Brisca( players );
        
        try
        {
@@ -33,6 +43,10 @@ public class ServerApp
        System.out.println( "\n\n\tGame finished!" );
    }
     
+   /**
+    * Starts the server for playing cards. One server for each match.
+    * @param String[] args Arguments, they are not taked into account.
+    */
    public static void main( String[] args )
    {   
        System.out.println( "Starting server..." );
