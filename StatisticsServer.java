@@ -9,6 +9,8 @@ public class StatisticsServer extends Thread
     public static int MAXIMUM_CLIENTS    = 2;
     public static int PORT               = 7778;
     
+    public static File f                 = new File( "StatisticsFile" );
+    
     /**
      * Constructor of class StatisticsServer.
      * @param Socket socket Socket to connect with client.
@@ -38,8 +40,21 @@ public class StatisticsServer extends Thread
      */
     private static ArrayList<Stat> getStatsFromDisk()
     {
-        // TODO!
-        return new ArrayList<Stat>();
+        ArrayList<Stat> stats = null;
+        
+        try{
+
+            ObjectInputStream in = new ObjectInputStream ( new FileInputStream ( "StatisticsFile" ) );
+
+            stats = (ArrayList<Stat>) in.readObject();
+            
+            in.close();
+        
+        }catch( FileNotFoundException fnf ){ System.err.println( "File does not exist." ); }
+        catch( ClassNotFoundException cnf ){ System.err.println( "Cannot find class." ); }
+        catch( IOException io ){ System.err.println( "Problem when reading Stats from file." ); }
+        
+        return stats;
     }
     
     /**
@@ -48,7 +63,27 @@ public class StatisticsServer extends Thread
      */
     public static void addStatToDisk( Stat stat )
     {
-        // TODO!
+        try{
+            
+            ArrayList<Stat> a = ( f.exists() ) ? getStatsFromDisk() : new ArrayList<Stat>();
+
+            a.add( stat );
+            
+            ObjectOutputStream out = new ObjectOutputStream ( new FileOutputStream ( f, false ) );
+            
+            out.writeObject( a );
+            
+            out.close();
+
+        }catch( IOException io ){ System.err.println( "Problem when writing Stats into file." ); }
+    }
+    
+    /**
+     * Deletes the Statistics file if there is one.
+     */
+    public static void deleteStatsFile()
+    {
+        if ( f.exists() ) f.delete();
     }
     
     /**

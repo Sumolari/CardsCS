@@ -247,7 +247,7 @@ public class Brisca extends Match
             scores.add( new Integer( Brisca.scoreForCards( aPlayer.wonCards() ) ) );
         }
         
-        Stat matchStats = new Stat( this.players, scores );
+        Stat matchStats = new Stat( PlayerStats.playersToPlayerStats( this.players ), scores );
         
         StatisticsServer.addStatToDisk( matchStats );
         

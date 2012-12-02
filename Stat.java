@@ -2,16 +2,16 @@ import java.util.*;
 
 public class Stat
 {
-    private ArrayList<Player>   players;
-    private Player              winner;
-    private ArrayList<Integer>  scores;
+    private ArrayList<PlayerStats>  players;
+    private PlayerStats             winner;
+    private ArrayList<Integer>      scores;
     
     /**
      * Creates a new Stat with given players and scores.
      * @param ArrayList<Player> players List of players.
      * @param ArrayList<Integer> scores List of scores.
      */
-    public Stat( ArrayList<Player> players, ArrayList<Integer> scores )
+    public Stat( ArrayList<PlayerStats> players, ArrayList<Integer> scores )
     {
         this.players    = players;
         this.scores     = scores;
