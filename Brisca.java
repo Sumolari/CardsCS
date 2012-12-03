@@ -35,21 +35,8 @@ public class Brisca extends Match
         System.out.println( "Triumph is\n" + triumphCard );
         
         System.out.println( "\tGive 3 cards to each player.\n\n" );
-        /*
-        for ( Player aPlayer : players )
-        {
-            for ( int i = 0; i < 3; i++ )
-            {
-                Card card = deck.popCard();
-                System.out.println( "\tGiving \n" + card + "\n to " + aPlayer.name() + "." );
-                aPlayer.addCardToHand( card );
-            }
-            aPlayer.output().println( "Triumph is\n" + triumphCard );
-        }
-        */
-        this.newRound();
         
-        System.out.println( "Start match" );    //Emm, esto no se llegará a ejecutar xD
+        this.newRound();
     }
     
     /**
@@ -443,7 +430,7 @@ public class Brisca extends Match
                     break;
                 case 12: // R 
                     totalScore += 4;
-                    break;                  //Ejem Ejem... Sobra? xD
+                    break;                  // Ejem Ejem... Sobra? xD
                 default: break;             //(bis)
             }
         }
