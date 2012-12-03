@@ -22,7 +22,7 @@ public class PlayerStats implements Serializable
     
     public String name(){ return name; }
 
-    
+    // Bitch please
     
     public static ArrayList<PlayerStats> playersToPlayerStats( ArrayList<Player> p )
     {
