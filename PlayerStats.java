@@ -19,6 +19,7 @@ public class PlayerStats implements Serializable
         this.name = p.name();
     }
     
+    
     public String name(){ return name; }
 
     
