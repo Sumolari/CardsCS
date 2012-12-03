@@ -6,10 +6,8 @@ public class StatisticsServer extends Thread
 {
     private Socket socket;
     
-    public static int MAXIMUM_CLIENTS    = 2;
-    public static int PORT               = 7778;
-    
-    public static File f                 = new File( "StatisticsFile" );
+    private static final int PORT               = 7778;
+    private static final File f                 = new File( "StatisticsFile" );
     
     // This is the change I want to make.
     
@@ -44,17 +42,18 @@ public class StatisticsServer extends Thread
     {
         ArrayList<Stat> stats = null;
         
-        try{
-
+        try 
+        {
             ObjectInputStream in = new ObjectInputStream ( new FileInputStream ( "StatisticsFile" ) );
 
-            stats = (ArrayList<Stat>) in.readObject();
+            stats = ( ArrayList<Stat> ) in.readObject();
             
             in.close();
-        
-        }catch( FileNotFoundException fnf ){ System.err.println( "File does not exist." ); }
-        catch( ClassNotFoundException cnf ){ System.err.println( "Cannot find class." ); }
-        catch( IOException io ){ System.err.println( "Problem when reading Stats from file." ); }
+        }
+        catch ( FileNotFoundException fnf ) { System.err.println( "File does not exist." ); }
+        catch ( ClassNotFoundException cnf ) { System.err.println( "Cannot find class." ); }
+        catch ( IOException io ) { System.err.println( "Problem when reading Stats from file." ); }
+        catch ( Exception e ) { System.err.println( "Other problem when reading Stats from file." ); }
         
         return stats;
     }
@@ -65,8 +64,8 @@ public class StatisticsServer extends Thread
      */
     public static void addStatToDisk( Stat stat )
     {
-        try{
-            
+        try
+        {
             ArrayList<Stat> a = ( f.exists() ) ? getStatsFromDisk() : new ArrayList<Stat>();
 
             a.add( stat );
@@ -76,8 +75,9 @@ public class StatisticsServer extends Thread
             out.writeObject( a );
             
             out.close();
-
-        }catch( IOException io ){ System.err.println( "Problem when writing Stats into file." ); }
+        }
+        catch ( IOException io ) { System.err.println( "Problem when writing Stats into file." ); }
+        catch ( Exception e ) { System.err.println( "Other problem when writing Stats into file" ); }
     }
     
     /**
@@ -111,7 +111,7 @@ public class StatisticsServer extends Thread
         } 
         catch ( IOException ioe )
         {
-            System.out.println( "Something went wrong, bro :( " );
+            System.out.println( "Something went wrong, bro :(" );
         } 
         
     }
@@ -120,5 +120,5 @@ public class StatisticsServer extends Thread
      * Alias for System.out.println( String message ).
      * @param String message String to print in standard output.
      */
-    public static void println ( String message ) { System.out.println( message ); }
+    public static void println( String message ) { System.out.println( message ); }
 }

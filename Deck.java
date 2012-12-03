@@ -81,7 +81,9 @@ public class Deck
         System.out.println( this.toString() );
     }
     /**
-     * Sorts randomly the elements of an ArrayList<Card>
+     * Sorts randomly the elements of an ArrayList<Card>.
+     * @param ArrayList<Card> a List of cards to unsort.
+     * @return ArrayList<Card> List of cards unsorted.
      */
     public static ArrayList<Card> unsort( ArrayList<Card> a )
     {
