@@ -13,14 +13,7 @@ public class PlayerStats implements Serializable
     {
         this.name = p.name();
     }
-    
-<<<<<<< HEAD
-    
-    public String name(){ return name; }
 
-    // Bitch please
-    
-=======
     /**
      * Returns the name of this player.
      * @return String Name of this player.
@@ -32,7 +25,6 @@ public class PlayerStats implements Serializable
      * @param ArrayList<Player> p List of players.
      * @return ArrayList<PlayerStat> List of names of players.
      */
->>>>>>> Sumolari's-branch
     public static ArrayList<PlayerStats> playersToPlayerStats( ArrayList<Player> p )
     {
         ArrayList<PlayerStats> res = new ArrayList<PlayerStats>();
