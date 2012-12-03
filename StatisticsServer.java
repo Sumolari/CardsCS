@@ -11,6 +11,8 @@ public class StatisticsServer extends Thread
     
     public static File f                 = new File( "StatisticsFile" );
     
+    // This is the change I want to make.
+    
     /**
      * Constructor of class StatisticsServer.
      * @param Socket socket Socket to connect with client.
