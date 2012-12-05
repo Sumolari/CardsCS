@@ -96,8 +96,31 @@ public class Hand
         
         for ( Card aCard : this.cards )
         {
-            res += aCard.toString() + "\n";
+            res += "\t ___ ";
         }
+        
+        res += "\n";
+        
+        for ( Card aCard : this.cards )
+        {
+            res += "\t|" + aCard.family() + "| ";
+        }
+        
+        res += "\n";
+        
+        for ( Card aCard : this.cards )
+        {
+            res += "\t| " + aCard.symbol() + " | ";
+        }
+        
+        res += "\n";
+        
+        for ( Card aCard : this.cards )
+        {
+            res += "\t|___| ";
+        }
+        
+        res += "\n\n";
         
         return res;
     } 

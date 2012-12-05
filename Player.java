@@ -8,6 +8,7 @@ public class Player
     private Socket socket;
     private Hand hand;
     private ArrayList<Card> wonCards;
+    private boolean wonLastRound;
     
     /**
      * Creates a new player given its name and its socket.
@@ -17,10 +18,11 @@ public class Player
      */
     public Player( String playerName, Socket socket )
     {
-        this.playerName = playerName;
-        this.socket = socket;
-        this.hand = new Hand();
-        this.wonCards = new ArrayList<Card>();
+        this.playerName     = playerName;
+        this.socket         = socket;
+        this.hand           = new Hand();
+        this.wonCards       = new ArrayList<Card>();
+        this.wonLastRound   = false;
     }
     
     /**
@@ -61,6 +63,17 @@ public class Player
         this.output().println( "The following card has been removed from your hand:\n" + card );
         this.hand.removeCard( card );
     }
+    
+    /**
+     * Returns whether this player has won last round or not.
+     * @return boolean True if player won last round, false if not.
+     */
+    public boolean wonLastRound() { return this.wonLastRound; }
+    
+    /**
+     * Sets that this player has won the last round.
+     */
+    public void setWonLastRound() { this.wonLastRound = true; }
     
     /**
      * Asks player for a card and returns it.

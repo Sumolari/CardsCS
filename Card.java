@@ -49,7 +49,7 @@ public class Card
      * Returns the symbol of the value of the card.
      * @return String String representing the value of the card. An integer for values lower than 10 and S, C and R for other ones.
      */
-    private String symbol()
+    public String symbol()
     {
         switch ( this.value )
         {

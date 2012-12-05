@@ -77,6 +77,7 @@ public class Brisca extends Match
             
             if ( gameIsFinished )
             {
+                this.players.get( 0 ).setWonLastRound();
                 finishGame();
             }
         }
