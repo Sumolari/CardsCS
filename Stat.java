@@ -1,6 +1,7 @@
 import java.util.*;
+import java.io.Serializable;
 
-public class Stat
+public class Stat implements Serializable
 {
     private ArrayList<PlayerStats>  players;
     private PlayerStats             winner;

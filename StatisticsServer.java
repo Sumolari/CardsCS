@@ -27,7 +27,10 @@ public class StatisticsServer extends Thread
             for ( Stat aS : getStatsFromDisk() )
             {
                    output.println( aS );
-            }    
+            }
+            
+            output.close();
+            socket.close();
         }
         catch ( Exception e )
         {
