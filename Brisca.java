@@ -171,7 +171,7 @@ public class Brisca extends Match
         this.sendLongLineToPlayers();
         Player winner = this.winnerPlayer( this.cardsInTable, this.triumphCard.family() );
         winner.addCardWonStack( this.cardsInTable );
-        this.sendToAllPlayers( "Winner is " + winner.name() );
+        this.sendToAllPlayers( "Winner of this round is " + winner.name() );
         this.sendToAllPlayers( this.scores() );
         
         finishRound( winner );
@@ -232,7 +232,7 @@ public class Brisca extends Match
         
         for ( Player aPlayer : this.players )
         {
-            scores.add( new Integer( Brisca.scoreForCards( aPlayer.wonCards() ) ) );
+            scores.add( new Integer( Brisca.scoreForCards( aPlayer.wonCards() ) + ( ( aPlayer.wonLastRound() ) ? 10 : 0 ) ) );
         }
         
         Stat matchStats = new Stat( PlayerStats.playersToPlayerStats( this.players ), scores );
@@ -280,7 +280,7 @@ public class Brisca extends Match
         
         for ( Player aPlayer : this.players )
         {
-            res += "\t" + aPlayer.name() + ": " + Brisca.scoreForCards( aPlayer.wonCards() ) + "\n";
+            res += "\t" + aPlayer.name() + ": " + ( Brisca.scoreForCards( aPlayer.wonCards() ) + ( ( aPlayer.wonLastRound() ) ? 10 : 0 ) ) + "\n";
         }
         
         return res;

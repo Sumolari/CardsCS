@@ -7,3 +7,5 @@
 *.ctxt
 *.class
 .DS_Store
+
+StatisticsFile
