@@ -291,26 +291,22 @@ public class Player
                             
                             inputWasCorrect = true;
                         }
+                        catch ( NoSuchElementException nsee )
+                        {
+                            ArrayList<Player> otherPlayers = new ArrayList<Player>( ServerApp.match().players() );
+                            otherPlayers.remove( this );
+                                
+                            ServerApp.match().sendToSomePlayers( this.name() + " has been disconnected. The match is finished.", otherPlayers );
+                                
+                            ServerApp.match().finishGame();
+                        }
                         catch ( Exception e )
                         {
                             this.output().println( "Invalid syntax, try again. Rembember that the syntax is {value} {family}, for instance: 7 espadas." );
-                            try
-                            {
-                                this.input().nextLine();
-                            }
-                            catch ( NoSuchElementException nsee )
-                            {
-                                ArrayList<Player> otherPlayers = new ArrayList<Player>( ServerApp.match().players() );
-                                otherPlayers.remove( this );
-                                
-                                ServerApp.match().sendToSomePlayers( this.name() + " has been disconnected. The match is finished.", otherPlayers );
-                                
-                                ServerApp.match().finishGame();
-                            }
                             inputWasCorrect = false;
                         }
                         
-                        if ( this.hand.hasOfFamily( requiredFamilies ) )
+                        if ( this.hand.hasOfFamily( requiredFamilies ) && inputWasCorrect )
                         {
                             try
                             {
@@ -349,18 +345,8 @@ public class Player
             } while ( !this.hand.has( card ) );
             // End hand check
             
-            this.output().println( "=====\nAre you sure that you want to play this card?\n\n" + card + "\n\n=====\n" );
-            
-            String selection = "";
-            
-            do
-            {
-                this.output().println( "Use 'Yes' or 'No': " );
-                selection = this.input().nextLine().trim().toUpperCase().substring(0,1);
-            } while ( "YN".indexOf( selection ) == -1 );
-            
-            userIsSure = selection.equals( "Y" );
-            
+            userIsSure = askForBoolean( "=====\nAre you sure that you want to play this card?\n\n" + card + "\n\n=====\n" );
+           
         } while ( !userIsSure );
         // End confirmation check
         
@@ -382,8 +368,9 @@ public class Player
         {
             this.output().println( message );
             this.output().println( "Use 'Yes' or 'No': " );
-            selection = this.input().nextLine().trim().toUpperCase().substring( 0, 1 );
-        } while ( "YN".indexOf( selection ) == -1 );
+            selection = this.input().nextLine().trim();
+            if ( !selection.equals( "" ) ) selection = selection.toUpperCase().substring( 0, 1 );
+        } while ( selection.equals( "" ) || "YN".indexOf( selection ) == -1 );
         
         return selection.equals( "Y" );
     }
